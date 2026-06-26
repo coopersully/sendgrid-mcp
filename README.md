@@ -1,5 +1,7 @@
 # SendGrid MCP Server
 
+[![CI](https://github.com/coopersully/sendgrid-mcp/actions/workflows/ci.yml/badge.svg)](https://github.com/coopersully/sendgrid-mcp/actions/workflows/ci.yml)
+
 An MCP stdio server for managing SendGrid email workflows from Codex and other MCP clients.
 
 It supports:

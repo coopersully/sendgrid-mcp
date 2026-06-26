@@ -1,0 +1,29 @@
+name: Feature request
+description: Propose a SendGrid or MCP workflow improvement.
+title: '[Feature]: '
+labels:
+  - enhancement
+body:
+  - type: textarea
+    id: use-case
+    attributes:
+      label: Use case
+      description: What workflow should this support?
+    validations:
+      required: true
+  - type: textarea
+    id: api
+    attributes:
+      label: SendGrid API surface
+      description: Link to the SendGrid API documentation if this maps to a specific endpoint.
+  - type: dropdown
+    id: mutation
+    attributes:
+      label: Tool safety
+      options:
+        - Read-only
+        - Mutating
+        - Destructive
+        - Unsure
+    validations:
+      required: true
