@@ -1,0 +1,12 @@
+startCommand:
+  type: stdio
+  configSchema:
+    type: object
+    required:
+      - sendgridApiKey
+    properties:
+      sendgridApiKey:
+        type: string
+        description: The API key for the SendGrid server.
+  commandFunction: |-
+    config=>({command:'node',args:['build/index.js'],env:{SENDGRID_API_KEY:config.sendgridApiKey}})

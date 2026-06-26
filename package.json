@@ -1,0 +1,66 @@
+{
+  "name": "sendgrid-mcp",
+  "version": "1.0.0",
+  "description": "Model Context Protocol server for SendGrid email, template, design, contact, and suppression workflows.",
+  "type": "module",
+  "license": "MIT",
+  "homepage": "https://github.com/coopersully/sendgrid-mcp#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/coopersully/sendgrid-mcp.git"
+  },
+  "bugs": {
+    "url": "https://github.com/coopersully/sendgrid-mcp/issues"
+  },
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "sendgrid",
+    "twilio",
+    "email",
+    "templates"
+  ],
+  "bin": {
+    "sendgrid-mcp": "./build/index.js"
+  },
+  "files": [
+    "build",
+    "README.md",
+    "LICENSE"
+  ],
+  "engines": {
+    "node": ">=24"
+  },
+  "scripts": {
+    "build": "tsc && chmod +x build/index.js",
+    "check": "npm run format:check && npm run lint && npm run typecheck && npm run test:coverage && npm run build && npm run audit:ci",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "lint": "eslint .",
+    "prepack": "npm run build",
+    "test:coverage": "vitest run --coverage",
+    "typecheck": "tsc --noEmit",
+    "audit:ci": "npm audit --audit-level=moderate",
+    "watch": "tsc --watch",
+    "inspector": "npx @modelcontextprotocol/inspector build/index.js",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.29.0",
+    "@sendgrid/client": "^8.1.6",
+    "@sendgrid/mail": "^8.1.6",
+    "dotenv": "^17.4.2"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@types/node": "^26.0.1",
+    "@vitest/coverage-v8": "^4.1.9",
+    "eslint": "^10.5.0",
+    "eslint-config-prettier": "^10.1.8",
+    "globals": "^17.7.0",
+    "prettier": "^3.8.5",
+    "typescript": "^6.0.3",
+    "typescript-eslint": "^8.62.0",
+    "vitest": "^4.1.9"
+  }
+}
