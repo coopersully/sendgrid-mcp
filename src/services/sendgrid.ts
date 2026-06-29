@@ -651,12 +651,13 @@ export class SendGridService {
     return response.body as SendGridSingleSend;
   }
 
-  async listSingleSends(): Promise<SendGridSingleSend[]> {
+  async listSingleSends(params: Record<string, any> = {}): Promise<SendGridListResponse<SendGridSingleSend>> {
     const [response] = await this.client.request({
       method: 'GET',
-      url: '/v3/marketing/singlesends'
+      url: '/v3/marketing/singlesends',
+      qs: compactObject(params)
     });
-    return (response.body as { result: SendGridSingleSend[] }).result || [];
+    return response.body as SendGridListResponse<SendGridSingleSend>;
   }
 
   async getSuppressionGroups() {

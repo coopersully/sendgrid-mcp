@@ -133,7 +133,11 @@ export const suppressionsToolDefinitions: ToolDefinition[] = [
       type: 'object',
       properties: {
         start_time: { type: 'number', description: 'Optional Unix start time' },
-        end_time: { type: 'number', description: 'Optional Unix end time' }
+        end_time: { type: 'number', description: 'Optional Unix end time' },
+        limit: { type: 'number', description: 'Maximum records to return. Defaults to 50.' },
+        offset: { type: 'number', description: 'Record offset for pagination' },
+        email: { type: 'string', description: 'Optional email filter. Wildcards are supported by SendGrid.' },
+        include_emails: { type: 'boolean', description: 'Set true to include email addresses. Defaults to false.' }
       },
       required: []
     }
@@ -145,7 +149,11 @@ export const suppressionsToolDefinitions: ToolDefinition[] = [
       type: 'object',
       properties: {
         start_time: { type: 'number', description: 'Optional Unix start time' },
-        end_time: { type: 'number', description: 'Optional Unix end time' }
+        end_time: { type: 'number', description: 'Optional Unix end time' },
+        limit: { type: 'number', description: 'Maximum records to return. Defaults to 50.' },
+        offset: { type: 'number', description: 'Record offset for pagination' },
+        email: { type: 'string', description: 'Optional email filter. Wildcards are supported by SendGrid.' },
+        include_emails: { type: 'boolean', description: 'Set true to include email addresses. Defaults to false.' }
       },
       required: []
     }
@@ -157,7 +165,11 @@ export const suppressionsToolDefinitions: ToolDefinition[] = [
       type: 'object',
       properties: {
         start_time: { type: 'number', description: 'Optional Unix start time' },
-        end_time: { type: 'number', description: 'Optional Unix end time' }
+        end_time: { type: 'number', description: 'Optional Unix end time' },
+        limit: { type: 'number', description: 'Maximum records to return. Defaults to 50.' },
+        offset: { type: 'number', description: 'Record offset for pagination' },
+        email: { type: 'string', description: 'Optional email filter. Wildcards are supported by SendGrid.' },
+        include_emails: { type: 'boolean', description: 'Set true to include email addresses. Defaults to false.' }
       },
       required: []
     }
@@ -169,7 +181,11 @@ export const suppressionsToolDefinitions: ToolDefinition[] = [
       type: 'object',
       properties: {
         start_time: { type: 'number', description: 'Optional Unix start time' },
-        end_time: { type: 'number', description: 'Optional Unix end time' }
+        end_time: { type: 'number', description: 'Optional Unix end time' },
+        limit: { type: 'number', description: 'Maximum records to return. Defaults to 50.' },
+        offset: { type: 'number', description: 'Record offset for pagination' },
+        email: { type: 'string', description: 'Optional email filter. Wildcards are supported by SendGrid.' },
+        include_emails: { type: 'boolean', description: 'Set true to include email addresses. Defaults to false.' }
       },
       required: []
     }

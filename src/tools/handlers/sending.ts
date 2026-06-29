@@ -1,5 +1,5 @@
 import { SendGridService } from '../../services/sendgrid.js';
-import { SendGridSingleSend } from '../../types/index.js';
+import { SendGridListResponse, SendGridSingleSend } from '../../types/index.js';
 import { ToolHandler } from '../types.js';
 import { compactObject, requireDestructiveConfirmation, requireNonEmptyObject } from '../utils.js';
 
@@ -110,6 +110,10 @@ export const sendingToolHandlers: Record<string, ToolHandler> = {
   },
   get_single_send: async (service: SendGridService, args: Record<string, any>) => {
     const retrievedSingleSend = await service.getSingleSend(args.single_send_id);
+    if (args.include_details === true) {
+      return { content: [{ type: 'text', text: JSON.stringify(retrievedSingleSend, null, 2) }] };
+    }
+
     return {
       content: [
         {
@@ -120,7 +124,8 @@ export const sendingToolHandlers: Record<string, ToolHandler> = {
               name: retrievedSingleSend.name,
               status: retrievedSingleSend.status,
               send_at: retrievedSingleSend.send_at,
-              list_ids: retrievedSingleSend.send_to.list_ids
+              list_ids: retrievedSingleSend.send_to?.list_ids,
+              segment_ids: retrievedSingleSend.send_to?.segment_ids
             },
             null,
             2
@@ -129,22 +134,29 @@ export const sendingToolHandlers: Record<string, ToolHandler> = {
       ]
     };
   },
-  list_single_sends: async (service: SendGridService, _args: Record<string, any>) => {
-    const allSingleSends = await service.listSingleSends();
+  list_single_sends: async (service: SendGridService, args: Record<string, any>) => {
+    const response = await service.listSingleSends(
+      compactObject({
+        page_size: args.page_size,
+        page_token: args.page_token
+      })
+    );
+    const allSingleSends = Array.isArray(response) ? response : response.result || [];
+    const payload = {
+      result: allSingleSends.map((s: SendGridSingleSend) => ({
+        id: s.id,
+        name: s.name,
+        status: s.status,
+        send_at: s.send_at
+      })),
+      ...(!Array.isArray(response) && response._metadata ? { _metadata: response._metadata } : {})
+    } satisfies SendGridListResponse<Pick<SendGridSingleSend, 'id' | 'name' | 'status' | 'send_at'>>;
+
     return {
       content: [
         {
           type: 'text',
-          text: JSON.stringify(
-            allSingleSends.map((s: SendGridSingleSend) => ({
-              id: s.id,
-              name: s.name,
-              status: s.status,
-              send_at: s.send_at
-            })),
-            null,
-            2
-          )
+          text: JSON.stringify(payload, null, 2)
         }
       ]
     };

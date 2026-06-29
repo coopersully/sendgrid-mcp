@@ -102,6 +102,33 @@ Every destructive tool family should have a test proving confirmation is require
 
 Coverage thresholds are enforced in `vitest.config.ts`. Raising coverage is preferred; lowering thresholds requires a specific reason in the pull request.
 
+## MCP Response Standards
+
+Read-only list tools should prefer bounded responses. Use the pagination model exposed by the SendGrid endpoint instead of inventing one:
+
+- `page_size` and `page_token` for cursor-based SendGrid Marketing endpoints.
+- `limit` and `offset` for offset-based suppression endpoints.
+- Endpoint-specific filters for APIs without pagination, such as Segment v2 `ids`, `parent_list_ids`, and `no_parent_list_id`.
+
+List tools that return a transformed collection should return:
+
+```json
+{
+  "result": [],
+  "_metadata": {}
+}
+```
+
+Use `_metadata` for pagination tokens, applied limits, offsets, and redaction flags.
+
+List tools that pass through a SendGrid response object may preserve the SendGrid response shape when it is already predictable and includes metadata.
+
+Large or privacy-sensitive list tools must use safe defaults. Suppression list tools default to `limit: 50` and redact `email` fields unless `include_emails: true` is provided.
+
+Get tools should return full resource detail when the endpoint is normally used for inspection. If a resource may contain campaign content or recipient targeting details, expose a summary by default and require an explicit detail flag.
+
+Tool descriptions must state non-obvious defaults, redaction behavior, and whether content details are omitted by default.
+
 ## Comment Standards
 
 Prefer clear names and small functions over comments.

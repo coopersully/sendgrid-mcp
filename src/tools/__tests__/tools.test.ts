@@ -272,6 +272,143 @@ describe('tools', () => {
     });
   });
 
+  it('defaults large suppression list tools to bounded redacted responses', async () => {
+    const service = makeService({
+      listBounces: vi.fn().mockResolvedValue([
+        {
+          email: 'person@example.com',
+          reason: '550 mailbox unavailable',
+          created: 1782740000
+        }
+      ])
+    });
+
+    const result = await handleToolCall(service, 'list_bounces', {});
+
+    expect(service.listBounces).toHaveBeenCalledWith({ limit: 50 });
+    expect(parseText(result)).toEqual({
+      result: [
+        {
+          email: '[redacted]',
+          reason: '550 mailbox unavailable',
+          created: 1782740000
+        }
+      ],
+      _metadata: {
+        limit: 50,
+        emails_redacted: true
+      }
+    });
+  });
+
+  it('allows suppression list tools to include emails and pagination when explicitly requested', async () => {
+    const service = makeService({
+      listSpamReports: vi
+        .fn()
+        .mockResolvedValue([{ email: 'person@example.com', ip: '192.0.2.1', created: 1782740000 }])
+    });
+
+    const result = await handleToolCall(service, 'list_spam_reports', {
+      limit: 10,
+      offset: 20,
+      email: 'person%',
+      include_emails: true
+    });
+
+    expect(service.listSpamReports).toHaveBeenCalledWith({
+      limit: 10,
+      offset: 20,
+      email: 'person%'
+    });
+    expect(parseText(result)).toEqual({
+      result: [{ email: 'person@example.com', ip: '192.0.2.1', created: 1782740000 }],
+      _metadata: {
+        limit: 10,
+        offset: 20,
+        emails_redacted: false
+      }
+    });
+  });
+
+  it('passes documented Segment v2 filters without unsupported pagination arguments', async () => {
+    const service = makeService({
+      listSegments: vi.fn().mockResolvedValue({ results: [{ id: 'segment-1' }] })
+    });
+
+    const result = await handleToolCall(service, 'list_segments', {
+      ids: ['segment-1'],
+      parent_list_ids: ['list-1'],
+      no_parent_list_id: true
+    });
+
+    expect(service.listSegments).toHaveBeenCalledWith({
+      ids: 'segment-1',
+      parent_list_ids: 'list-1',
+      no_parent_list_id: true
+    });
+    expect(parseText(result)).toEqual({ results: [{ id: 'segment-1' }] });
+  });
+
+  it('returns paginated Single Sends summaries with metadata', async () => {
+    const service = makeService({
+      listSingleSends: vi.fn().mockResolvedValue({
+        result: [
+          {
+            id: 'single-1',
+            name: 'Newsletter',
+            status: 'draft',
+            send_at: null,
+            email_config: {
+              subject: 'Hidden'
+            }
+          }
+        ],
+        _metadata: { next: 'next-token' }
+      })
+    });
+
+    const result = await handleToolCall(service, 'list_single_sends', { page_size: 10, page_token: 'token' });
+
+    expect(service.listSingleSends).toHaveBeenCalledWith({ page_size: 10, page_token: 'token' });
+    expect(parseText(result)).toEqual({
+      result: [
+        {
+          id: 'single-1',
+          name: 'Newsletter',
+          status: 'draft',
+          send_at: null
+        }
+      ],
+      _metadata: { next: 'next-token' }
+    });
+  });
+
+  it('can return full Single Send details when explicitly requested', async () => {
+    const singleSend = {
+      id: 'single-1',
+      name: 'Newsletter',
+      status: 'draft',
+      send_at: null,
+      send_to: { list_ids: ['list-1'], segment_ids: ['segment-1'] },
+      email_config: {
+        subject: 'Full subject',
+        html_content: '<p>Full</p>',
+        plain_content: 'Full',
+        sender_id: 1
+      }
+    };
+    const service = makeService({
+      getSingleSend: vi.fn().mockResolvedValue(singleSend)
+    });
+
+    const result = await handleToolCall(service, 'get_single_send', {
+      single_send_id: 'single-1',
+      include_details: true
+    });
+
+    expect(parseText(result)).toEqual(singleSend);
+  });
+
   it('handles every advertised tool with valid arguments', async () => {
     const service = makeFullService();
     const tools = getToolDefinitions(service);

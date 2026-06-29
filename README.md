@@ -146,18 +146,18 @@ Safe editing workflow:
 
 ### Custom Fields and Segments
 
-| Tool                  | Purpose                                                            | Mutates |
-| --------------------- | ------------------------------------------------------------------ | ------- |
-| `list_custom_fields`  | List marketing contact custom field definitions.                   | No      |
-| `create_custom_field` | Create a custom field definition.                                  | Yes     |
-| `update_custom_field` | Rename a custom field definition.                                  | Yes     |
-| `delete_custom_field` | Delete a custom field definition. Requires `confirm_delete: true`. | Yes     |
-| `list_segments`       | List Segments v2 segments.                                         | No      |
-| `create_segment`      | Create a segment from `name` and `query_dsl`.                      | Yes     |
-| `get_segment`         | Retrieve one segment.                                              | No      |
-| `update_segment`      | Update a segment name or query DSL.                                | Yes     |
-| `refresh_segment`     | Refresh a segment.                                                 | Yes     |
-| `delete_segment`      | Delete a segment. Requires `confirm_delete: true`.                 | Yes     |
+| Tool                  | Purpose                                                                                           | Mutates |
+| --------------------- | ------------------------------------------------------------------------------------------------- | ------- |
+| `list_custom_fields`  | List marketing contact custom field definitions.                                                  | No      |
+| `create_custom_field` | Create a custom field definition.                                                                 | Yes     |
+| `update_custom_field` | Rename a custom field definition.                                                                 | Yes     |
+| `delete_custom_field` | Delete a custom field definition. Requires `confirm_delete: true`.                                | Yes     |
+| `list_segments`       | List Segments v2 segments with optional `ids`, `parent_list_ids`, or `no_parent_list_id` filters. | No      |
+| `create_segment`      | Create a segment from `name` and `query_dsl`.                                                     | Yes     |
+| `get_segment`         | Retrieve one segment.                                                                             | No      |
+| `update_segment`      | Update a segment name or query DSL.                                                               | Yes     |
+| `refresh_segment`     | Refresh a segment.                                                                                | Yes     |
+| `delete_segment`      | Delete a segment. Requires `confirm_delete: true`.                                                | Yes     |
 
 ### Sending
 
@@ -176,33 +176,33 @@ Safe editing workflow:
 | `list_single_send_categories` | List Single Send categories.                                                                                                            | No      |
 | `list_single_send_stats`      | Retrieve Single Sends stats.                                                                                                            | No      |
 | `get_single_send_stats`       | Retrieve stats for one Single Send.                                                                                                     | No      |
-| `list_single_sends`           | List Single Sends.                                                                                                                      | No      |
-| `get_single_send`             | Retrieve one Single Send.                                                                                                               | No      |
+| `list_single_sends`           | List Single Sends as summaries with optional `page_size` and `page_token`.                                                              | No      |
+| `get_single_send`             | Retrieve one Single Send summary. Use `include_details: true` for the full payload.                                                     | No      |
 
 ### Suppressions, Senders, Stats, and Validation
 
-| Tool                                   | Purpose                                                                               | Mutates |
-| -------------------------------------- | ------------------------------------------------------------------------------------- | ------- |
-| `list_verified_senders`                | List verified sender identities.                                                      | No      |
-| `list_suppression_groups`              | List unsubscribe groups.                                                              | No      |
-| `list_group_suppressions`              | List suppressed addresses in a suppression group.                                     | No      |
-| `add_group_suppressions`               | Add addresses to a suppression group.                                                 | Yes     |
-| `delete_group_suppression`             | Remove an address from a suppression group. Requires `confirm_delete: true`.          | Yes     |
-| `list_global_suppressions`             | List global suppressions.                                                             | No      |
-| `add_global_suppressions`              | Add addresses to global suppressions.                                                 | Yes     |
-| `delete_global_suppression`            | Remove an address from global suppressions. Requires `confirm_delete: true`.          | Yes     |
-| `list_bounces`                         | List bounce suppressions.                                                             | No      |
-| `list_blocks`                          | List block suppressions.                                                              | No      |
-| `list_invalid_emails`                  | List invalid email suppressions.                                                      | No      |
-| `list_spam_reports`                    | List spam report suppressions.                                                        | No      |
-| `list_marketing_senders`               | List Marketing sender identities.                                                     | No      |
-| `get_marketing_sender`                 | Retrieve one Marketing sender identity.                                               | No      |
-| `create_marketing_sender`              | Create a Marketing sender identity.                                                   | Yes     |
-| `update_marketing_sender`              | Update a Marketing sender identity.                                                   | Yes     |
-| `delete_marketing_sender`              | Delete a Marketing sender identity. Requires `confirm_delete: true`.                  | Yes     |
-| `resend_marketing_sender_verification` | Resend a sender verification email.                                                   | Yes     |
-| `get_stats`                            | Retrieve email stats for `start_date`, optional `end_date`, and optional aggregation. | No      |
-| `validate_email`                       | Validate one email address.                                                           | No      |
+| Tool                                   | Purpose                                                                                                                    | Mutates |
+| -------------------------------------- | -------------------------------------------------------------------------------------------------------------------------- | ------- |
+| `list_verified_senders`                | List verified sender identities.                                                                                           | No      |
+| `list_suppression_groups`              | List unsubscribe groups.                                                                                                   | No      |
+| `list_group_suppressions`              | List suppressed addresses in a suppression group.                                                                          | No      |
+| `add_group_suppressions`               | Add addresses to a suppression group.                                                                                      | Yes     |
+| `delete_group_suppression`             | Remove an address from a suppression group. Requires `confirm_delete: true`.                                               | Yes     |
+| `list_global_suppressions`             | List global suppressions.                                                                                                  | No      |
+| `add_global_suppressions`              | Add addresses to global suppressions.                                                                                      | Yes     |
+| `delete_global_suppression`            | Remove an address from global suppressions. Requires `confirm_delete: true`.                                               | Yes     |
+| `list_bounces`                         | List bounce suppressions. Defaults to `limit: 50` and redacted emails; use `include_emails: true` to reveal emails.        | No      |
+| `list_blocks`                          | List block suppressions. Defaults to `limit: 50` and redacted emails; use `include_emails: true` to reveal emails.         | No      |
+| `list_invalid_emails`                  | List invalid email suppressions. Defaults to `limit: 50` and redacted emails; use `include_emails: true` to reveal emails. | No      |
+| `list_spam_reports`                    | List spam report suppressions. Defaults to `limit: 50` and redacted emails; use `include_emails: true` to reveal emails.   | No      |
+| `list_marketing_senders`               | List Marketing sender identities.                                                                                          | No      |
+| `get_marketing_sender`                 | Retrieve one Marketing sender identity.                                                                                    | No      |
+| `create_marketing_sender`              | Create a Marketing sender identity.                                                                                        | Yes     |
+| `update_marketing_sender`              | Update a Marketing sender identity.                                                                                        | Yes     |
+| `delete_marketing_sender`              | Delete a Marketing sender identity. Requires `confirm_delete: true`.                                                       | Yes     |
+| `resend_marketing_sender_verification` | Resend a sender verification email.                                                                                        | Yes     |
+| `get_stats`                            | Retrieve email stats for `start_date`, optional `end_date`, and optional aggregation.                                      | No      |
+| `validate_email`                       | Validate one email address.                                                                                                | No      |
 
 ## Safety Behavior
 
@@ -212,6 +212,14 @@ Safe editing workflow:
 - Destructive delete tools require `confirm_delete: true`.
 - Template content edits are safe by default through `create_template_version`, which creates inactive versions unless `active: 1` is explicitly provided.
 - Server error logging avoids dumping raw error objects to stderr.
+
+## Agent Response Conventions
+
+- List tools use the SendGrid endpoint's real pagination model: `page_size`/`page_token`, `limit`/`offset`, or endpoint-specific filters.
+- Transformed list responses use `{ "result": [], "_metadata": {} }`.
+- `_metadata` carries pagination, applied limits, offsets, and redaction flags.
+- Suppression list tools default to `limit: 50` and redact `email` fields unless `include_emails: true` is set.
+- Content-heavy get tools may return summaries by default and expose full details through an explicit flag such as `include_details: true`.
 
 ## Development
 

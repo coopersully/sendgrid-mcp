@@ -71,13 +71,19 @@ export const marketingToolDefinitions: ToolDefinition[] = [
     inputSchema: {
       type: 'object',
       properties: {
-        page_size: {
-          type: 'number',
-          description: 'Optional page size'
+        ids: {
+          type: 'array',
+          items: { type: 'string' },
+          description: 'Optional segment IDs to retrieve'
         },
-        page_token: {
-          type: 'string',
-          description: 'Optional page token'
+        parent_list_ids: {
+          type: 'array',
+          items: { type: 'string' },
+          description: 'Optional parent list IDs to filter segments'
+        },
+        no_parent_list_id: {
+          type: 'boolean',
+          description: 'Set true to return segments that are not associated with a parent list'
         }
       },
       required: []

@@ -33,8 +33,9 @@ export const marketingToolHandlers: Record<string, ToolHandler> = {
   list_segments: async (service: SendGridService, args: Record<string, any>) => {
     const segments = await service.listSegments(
       compactObject({
-        page_size: args.page_size,
-        page_token: args.page_token
+        ids: args.ids?.join(','),
+        parent_list_ids: args.parent_list_ids?.join(','),
+        no_parent_list_id: args.no_parent_list_id
       })
     );
     return { content: [{ type: 'text', text: JSON.stringify(segments, null, 2) }] };

@@ -18,3 +18,14 @@ export const requireNonEmptyObject = (value: Record<string, any>, action: string
     throw new Error(`${action} requires at least one field`);
   }
 };
+
+export const redactEmailFields = <T extends Record<string, any>>(items: T[], includeEmails: boolean): T[] => {
+  if (includeEmails) {
+    return items;
+  }
+
+  return items.map((item) => ({
+    ...item,
+    ...(typeof item.email === 'string' ? { email: '[redacted]' } : {})
+  }));
+};

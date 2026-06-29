@@ -295,6 +295,10 @@ export const sendingToolDefinitions: ToolDefinition[] = [
         single_send_id: {
           type: 'string',
           description: 'ID of the single send to retrieve'
+        },
+        include_details: {
+          type: 'boolean',
+          description: 'Set true to return the full Single Send payload. Defaults to false summary output.'
         }
       },
       required: ['single_send_id']
@@ -302,10 +306,19 @@ export const sendingToolDefinitions: ToolDefinition[] = [
   },
   {
     name: 'list_single_sends',
-    description: 'List all single sends in your SendGrid account',
+    description: 'Read-only: list SendGrid Single Sends as summaries with optional pagination',
     inputSchema: {
       type: 'object',
-      properties: {},
+      properties: {
+        page_size: {
+          type: 'number',
+          description: 'Optional page size'
+        },
+        page_token: {
+          type: 'string',
+          description: 'Optional page token from a previous response'
+        }
+      },
       required: []
     }
   }

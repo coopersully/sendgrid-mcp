@@ -108,6 +108,7 @@ export interface SendGridSingleSend {
   send_at?: string;
   send_to: {
     list_ids: string[];
+    segment_ids?: string[];
   };
   email_config: {
     subject: string;
